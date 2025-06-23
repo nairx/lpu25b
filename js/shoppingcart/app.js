@@ -24,20 +24,33 @@ function addToCart(id) {
 }
 function increment(id) {
   cart = { ...cart, [id]: cart[id] + 1 };
+  showCart();
 }
 function decrement(id) {
   cart = { ...cart, [id]: cart[id] - 1 };
+  showCart();
 }
 function showCart() {
   let str = "";
   products.map((value) => {
-    cart[value.id] > 0 && (str += `<li>${value.name}-$${value.price}-<button>-</button>${cart[value.id]}<button>+</button>-$${value.price*cart[value.id]}</li>`);
+    cart[value.id] > 0 &&
+      (str += `<li>${value.name}-$${value.price}-<button onclick=decrement(${
+        value.id
+      })>-</button>
+      ${cart[value.id]}
+      <button onclick=increment('${value.id}')>+</button>-$${
+        value.price * cart[value.id]
+      }</li>`);
   });
+  str += "<h4 id='orderValueH4'></h4>";
   let r = document.getElementById("root");
   r.innerHTML = str;
+  showOrderValue()
 }
 
-const total = products.reduce((sum, value) => {
-  return sum + value.price * (cart[value.id] ?? 0);
-}, 0);
-console.log(`Order Value:${total}`);
+const showOrderValue = () => {
+  const total = products.reduce((sum, value) => {
+    return sum + value.price * (cart[value.id] ?? 0);
+  }, 0);
+  document.getElementById("orderValueH4").innerHTML = `Order Value:${total}`;
+};
