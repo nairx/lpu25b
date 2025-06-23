@@ -6,10 +6,15 @@ const products = [
   { id: 3, name: "Product 3", price: 75 },
 ];
 const showProducts = () => {
-  let str = "";
+  let str = "<div class='row'>";
   products.map((value) => {
-    str += `<li>${value.id}-${value.name}-$${value.price}</li>`;
+    str += `<div>
+    <h3>${value.name}</h3>
+    <h4>$${value.price}</h4>
+    <button>Add to Cart</button>
+    </div>`;
   });
+  str += "</div>";
   let r = document.getElementById("root");
   r.innerHTML = str;
 };
