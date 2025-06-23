@@ -5,18 +5,15 @@ const products = [
   { id: 2, name: "Product 2", price: 50 },
   { id: 3, name: "Product 3", price: 75 },
 ];
-// const showProducts = () => {
-//   let str = "";
-//   products.map((value) => {
-//     str += `<li>${value.id}-${value.name}-$${value.price}</li>`;
-//   });
-//   let r = document.getElementById("root");
-//   r.innerHTMNL = str;
-// };
 const showProducts = () => {
+  let str = "";
+  products.map((value) => {
+    str += `<li>${value.id}-${value.name}-$${value.price}</li>`;
+  });
   let r = document.getElementById("root");
-  r.innerHTMNL = "Hello World"
+  r.innerHTML = str;
 };
+
 function addToCart(id) {
   cart = { ...cart, [id]: 1 };
 }
@@ -69,4 +66,4 @@ const total = products.reduce((sum, value) => {
 }, 0);
 console.log(`Order Value:${total}`);
 
-showProducts();
+//showProducts();
