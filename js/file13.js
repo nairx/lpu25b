@@ -1,4 +1,4 @@
-//spread
+//spread operator
 let marks = {
   maths: 95,
 };
