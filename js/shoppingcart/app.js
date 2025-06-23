@@ -19,16 +19,23 @@ const showProducts = () => {
   r.innerHTML = str;
 };
 
+const showCount = () => {
+  document.getElementById("cartCount").innerHTML = Object.keys(cart).length;
+};
+
 function addToCart(id) {
   cart = { ...cart, [id]: 1 };
+  showCount()
 }
 function increment(id) {
   cart = { ...cart, [id]: cart[id] + 1 };
   showCart();
+  showCount()
 }
 function decrement(id) {
   cart = { ...cart, [id]: cart[id] - 1 };
   showCart();
+  showCount()
 }
 function showCart() {
   let str = "";
@@ -45,7 +52,7 @@ function showCart() {
   str += "<h4 id='orderValueH4'></h4>";
   let r = document.getElementById("root");
   r.innerHTML = str;
-  showOrderValue()
+  showOrderValue();
 }
 
 const showOrderValue = () => {
