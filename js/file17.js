@@ -1,3 +1,4 @@
+//closures
 function main() {
   let b = 1;
   function sub() {
