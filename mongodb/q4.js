@@ -16,3 +16,7 @@ db.employees.insertMany([
     date: Date(),
   },
 ]);
+
+db.employees.find({ department: { $in: ["Admin", "HR"] } });
+
+db.employees.find({ department: { $nin: ["Admin", "HR"] } });
