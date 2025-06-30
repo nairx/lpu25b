@@ -39,3 +39,4 @@ Secondary will start, can read but cannot write
 db.getMongo().setReadPref("secondary")  //or rs.secondaryOk()
 use mytestdb
 db.customers.find() – will work now
+
