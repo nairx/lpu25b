@@ -21,3 +21,14 @@
 // Open new tab and Initiate replica set for shard2 servers
 // mongosh --port 27022
 // rs.initiate({_id:'rs2',members:[{_id:0,host:'localhost:27022'},{_id:1,host:'localhost:27023'}]})
+//////////////////
+// Start Mongo Routing Service on separate tab of command prompt
+// mongos  --configdb cf/localhost:27018,localhost:27019 --port 27050
+// sh.addShard("rs1/localhost:27020,localhost:27021")
+// sh.addShard("rs2/localhost:27022,localhost:27023")
+// sh.status()
+// use mydatabase
+// sh.enableSharding("mydatabase")
+// sh.shardCollection("mydatabase.customers", { _id: 1 })
+// sh.status()
+// sh.getShardedDataDistribution() //run this after executing below nodejs scripts
