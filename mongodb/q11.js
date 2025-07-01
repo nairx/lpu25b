@@ -14,3 +14,10 @@
 // Open new tab and Initiate replica set for shard1 servers
 // mongosh --port 27020
 // rs.initiate({_id:'rs1',members:[{_id:0,host:'localhost:27020'},{_id:1,host:'localhost:27021'}]})
+////////////////////////
+// Start Shard2 servers on separate tabs of command prompt
+// mongod --shardsvr --port 27022 --replSet rs2 --dbpath d:\dbshards\s2
+// mongod --shardsvr --port 27023 --replSet rs2 --dbpath d:\dbshards\s2r
+// Open new tab and Initiate replica set for shard2 servers
+// mongosh --port 27022
+// rs.initiate({_id:'rs2',members:[{_id:0,host:'localhost:27022'},{_id:1,host:'localhost:27023'}]})
