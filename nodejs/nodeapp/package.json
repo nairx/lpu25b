@@ -1,5 +1,6 @@
 {
   "name": "nodeapp",
+  "type": "module",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -8,5 +9,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10"
+  }
 }
