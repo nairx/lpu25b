@@ -26,11 +26,11 @@ app.get("/products", (req, res) => {
   res.json(products);
 });
 
-app.get("/products/:id", (req, res) => {
-  const pid = req.params.id;
+// app.get("/products/:id", (req, res) => {
+//   const pid = req.params.id;
 
-  res.json();
-});
+//   res.json();
+// });
 
 // app.get("/:name", (req, res) => {
 //   res.send(req.params.name);
