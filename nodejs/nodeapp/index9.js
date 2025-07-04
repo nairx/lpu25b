@@ -31,12 +31,11 @@ const authorize = (role) => {
   };
 };
 
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  const found = users.find(
-    (user) => user.email === email && user.password === password
-  );
-  if (found) {
+  const found = users.find((user) => user.email === email);
+  const matchPass = await bcrypt.compare(password, found.password);
+  if (matchPass) {
     const token = jwt.sign(found, SECRET, { expiresIn: "1h" });
     res.status(200).json({ user: found, token });
   } else {
