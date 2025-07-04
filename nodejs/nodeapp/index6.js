@@ -3,16 +3,25 @@ const app = express();
 app.listen(8080);
 app.use(express.json());
 let users = [];
-
-const auth = (req, res, next) => {
+const authenticate = (req, res, next) => {
   if (req.headers.authorization) {
+    req.role = "user";
     next();
   } else {
-    res.json({ message: "Invalid Token" });
+    return res.json({ message: "Invalid Token" });
   }
 };
+const authorize = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.role)) {
+      return res.send("Access Denied");
+    } else {
+      next();
+    }
+  };
+};
 
-app.get("/", auth, (req, res) => {
+app.get("/", authenticate, authorize("admin"), (req, res) => {
   res.json(users);
 });
 app.post("/register", (req, res) => {
