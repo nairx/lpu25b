@@ -5,20 +5,7 @@ const SECRET = "sometext";
 app.listen(8080, () => {
   console.log("Server started");
 });
-const users = [
-  {
-    name: "John",
-    email: "john@email.com",
-    password: "1234",
-    role: "user",
-  },
-  {
-    name: "Cathy",
-    email: "cathy@email.com",
-    password: "1234",
-    role: "admin",
-  },
-];
+let users = []
 app.use(express.json());
 
 const authenticate = (req, res, next) => {
@@ -31,6 +18,17 @@ const authenticate = (req, res, next) => {
   } catch (err) {
     return res.json({ message: "Access Denied" });
   }
+};
+
+const authorize = (role) => {
+  return (req, res, next) => {
+    if (req.role === role){
+      next()
+    }
+    else{
+      return res.json({message:"Unauthorized Access"})
+    }
+  };
 };
 
 app.post("/login", (req, res) => {
@@ -46,6 +44,10 @@ app.post("/login", (req, res) => {
   }
 });
 
-app.get("/users", authenticate, (req, res) => {
+app.get("/users", authenticate, authorize("admin"), (req, res) => {
   res.json(users);
 });
+
+app.post("/register",(req,res)=>{
+  
+})
