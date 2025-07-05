@@ -44,7 +44,11 @@ app.post("/login", async (req, res) => {
     if (existingUser) {
       const isMatch = await bcrypt.compare(password, existingUser.password);
       if (isMatch) {
-        const userObj = { username, email, role };
+        const userObj = {
+          username: existingUser.username,
+          email: existingUser.email,
+          role: existingUser.role,
+        };
         const token = jwt.sign(userObj, SECRET, { expiresIn: "1h" });
         res.status(200).json({ user: userObj, token });
       } else {
