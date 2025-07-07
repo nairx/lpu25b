@@ -5,6 +5,9 @@ import jwt from "jsonwebtoken";
 const SECRET = "something";
 const app = express();
 app.use(express.json());
+
+const userRouter = express.Router();
+
 mongoose.connect("mongodb://localhost:27017/lpu").then(() => {
   app.listen(8080, () => {
     console.log("Server started");
@@ -43,7 +46,7 @@ const userSchema = mongoose.Schema(
   { timestamps: true }
 );
 const userModel = mongoose.model("User", userSchema);
-app.post("/register", async (req, res) => {
+userRouter.post("/register", async (req, res) => {
   try {
     const { username, email, password } = req.body;
     const hashedpwd = await bcrypt.hash(password, 10);
@@ -60,7 +63,7 @@ app.post("/register", async (req, res) => {
   }
 });
 
-app.post("/login", async (req, res) => {
+userRouter.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     const existingUser = await userModel.findOne({ email });
@@ -86,14 +89,14 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.get("/showusers", authenticate, authorize("admin"), async (req, res) => {
+userRouter.get("/showusers", authenticate, authorize("admin"), async (req, res) => {
   try {
     const result = await userModel.find();
     res.status(200).json(result);
   } catch (err) {}
 });
 
-app.patch("/:id", authenticate, authorize("admin"), async (req, res) => {
+userRouter.patch("/:id", authenticate, authorize("admin"), async (req, res) => {
   try {
     const id = req.params.id;
     const body = req.body;
@@ -105,7 +108,7 @@ app.patch("/:id", authenticate, authorize("admin"), async (req, res) => {
   }
 });
 
-app.delete("/:id", authenticate, authorize("admin"), async (req, res) => {
+userRouter.delete("/:id", authenticate, authorize("admin"), async (req, res) => {
   try {
     const id = req.params.id;
     const result = await userModel.findByIdAndDelete(id);
@@ -116,13 +119,15 @@ app.delete("/:id", authenticate, authorize("admin"), async (req, res) => {
   }
 });
 
-app.get("/:id/profile", authenticate, async (req, res) => {
+userRouter.get("/:id/profile", authenticate, async (req, res) => {
   try {
     const id = req.params.id;
     const result = await userModel.findOne({ _id: id });
-    res.status(200).json(result)
+    res.status(200).json(result);
   } catch (err) {
     console.log(err);
     res.status(400).json({ message: "Something went wrong" });
   }
 });
+
+app.use("/api/users", userRouter);
