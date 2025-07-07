@@ -93,12 +93,34 @@ app.get("/showusers", authenticate, authorize("admin"), async (req, res) => {
   } catch (err) {}
 });
 
-app.patch("/:id", async (req, res) => {
+app.patch("/:id", authenticate, authorize("admin"), async (req, res) => {
   try {
     const id = req.params.id;
     const body = req.body;
     const result = await userModel.findByIdAndUpdate(id, body);
     res.status(200).json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: "Something went wrong" });
+  }
+});
+
+app.delete("/:id", authenticate, authorize("admin"), async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await userModel.findByIdAndDelete(id);
+    res.status(200).json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: "Something went wrong" });
+  }
+});
+
+app.get("/:id/profile", authenticate, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await userModel.findOne({ _id: id });
+    res.status(200).json(result)
   } catch (err) {
     console.log(err);
     res.status(400).json({ message: "Something went wrong" });
