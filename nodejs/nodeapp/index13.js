@@ -10,6 +10,29 @@ mongoose.connect("mongodb://localhost:27017/lpu").then(() => {
     console.log("Server started");
   });
 });
+
+const authenticate = (req, res, next) => {
+  try {
+    let token = req.headers.authorization;
+    token = token.split(" ")[1];
+    const user = jwt.verify(token, SECRET);
+    req.role = user.role;
+    next();
+  } catch (err) {
+    return res.json({ message: "Access Denied" });
+  }
+};
+
+const authorize = (role) => {
+  return (req, res, next) => {
+    if (req.role === role) {
+      next();
+    } else {
+      return res.json({ message: "Unauthorized Access" });
+    }
+  };
+};
+
 const userSchema = mongoose.Schema(
   {
     username: { type: String },
@@ -61,4 +84,11 @@ app.post("/login", async (req, res) => {
     console.log(err);
     res.status(500).json({ message: "Something went wrong" });
   }
+});
+
+app.get("/showusers", authenticate, authorize("admin"), async (req, res) => {
+  try {
+    const result = await userModel.find();
+    res.status(200).json(result);
+  } catch (err) {}
 });
