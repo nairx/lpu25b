@@ -92,3 +92,15 @@ app.get("/showusers", authenticate, authorize("admin"), async (req, res) => {
     res.status(200).json(result);
   } catch (err) {}
 });
+
+app.patch("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const body = req.body;
+    const result = await userModel.findByIdAndUpdate(id, body);
+    res.status(200).json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: "Something went wrong" });
+  }
+});
