@@ -1,28 +1,14 @@
 import mongoose from "mongoose";
-import express from "express"
+import express from "express";
 import bcrypt from "bcrypt";
-import { authenticate,authorize } from "./auth.js";
+import { authenticate, authorize } from "./auth.js";
 import jwt from "jsonwebtoken";
 const SECRET = "something";
 const Router = express.Router();
 import userModel from "./userModel.js";
+import { register } from "./userController.js";
 
-Router.post("/register", async (req, res) => {
-  try {
-    const { username, email, password } = req.body;
-    const hashedpwd = await bcrypt.hash(password, 10);
-    const user = {
-      username,
-      email,
-      password: hashedpwd,
-    };
-    const result = await userModel.create(user);
-    res.status(201).json(result);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Something went wrong" });
-  }
-});
+Router.post("/register", register);
 
 Router.post("/login", async (req, res) => {
   try {
@@ -91,4 +77,4 @@ Router.get("/:id/profile", authenticate, async (req, res) => {
   }
 });
 
-export default Router
+export default Router;
