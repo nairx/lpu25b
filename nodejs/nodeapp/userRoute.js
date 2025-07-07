@@ -1,46 +1,13 @@
 import mongoose from "mongoose";
 import express from "express"
 import bcrypt from "bcrypt";
+import { authenticate,authorize } from "./auth.js";
 import jwt from "jsonwebtoken";
 const SECRET = "something";
+const Router = express.Router();
+import userModel from "./userModel.js";
 
-const userRouter = express.Router();
-
-
-const userSchema = mongoose.Schema(
-  {
-    username: { type: String },
-    email: { type: String, unique: true },
-    password: { type: String },
-    role: { type: String, default: "user" },
-  },
-  { timestamps: true }
-);
-const userModel = mongoose.model("User", userSchema);
-
-const authenticate = (req, res, next) => {
-  try {
-    let token = req.headers.authorization;
-    token = token.split(" ")[1];
-    const user = jwt.verify(token, SECRET);
-    req.role = user.role;
-    next();
-  } catch (err) {
-    return res.json({ message: "Access Denied" });
-  }
-};
-
-const authorize = (role) => {
-  return (req, res, next) => {
-    if (req.role === role) {
-      next();
-    } else {
-      return res.json({ message: "Unauthorized Access" });
-    }
-  };
-};
-
-userRouter.post("/register", async (req, res) => {
+Router.post("/register", async (req, res) => {
   try {
     const { username, email, password } = req.body;
     const hashedpwd = await bcrypt.hash(password, 10);
@@ -57,7 +24,7 @@ userRouter.post("/register", async (req, res) => {
   }
 });
 
-userRouter.post("/login", async (req, res) => {
+Router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     const existingUser = await userModel.findOne({ email });
@@ -83,14 +50,14 @@ userRouter.post("/login", async (req, res) => {
   }
 });
 
-userRouter.get("/showusers", authenticate, authorize("admin"), async (req, res) => {
+Router.get("/showusers", authenticate, authorize("admin"), async (req, res) => {
   try {
     const result = await userModel.find();
     res.status(200).json(result);
   } catch (err) {}
 });
 
-userRouter.patch("/:id", authenticate, authorize("admin"), async (req, res) => {
+Router.patch("/:id", authenticate, authorize("admin"), async (req, res) => {
   try {
     const id = req.params.id;
     const body = req.body;
@@ -102,7 +69,7 @@ userRouter.patch("/:id", authenticate, authorize("admin"), async (req, res) => {
   }
 });
 
-userRouter.delete("/:id", authenticate, authorize("admin"), async (req, res) => {
+Router.delete("/:id", authenticate, authorize("admin"), async (req, res) => {
   try {
     const id = req.params.id;
     const result = await userModel.findByIdAndDelete(id);
@@ -113,7 +80,7 @@ userRouter.delete("/:id", authenticate, authorize("admin"), async (req, res) => 
   }
 });
 
-userRouter.get("/:id/profile", authenticate, async (req, res) => {
+Router.get("/:id/profile", authenticate, async (req, res) => {
   try {
     const id = req.params.id;
     const result = await userModel.findOne({ _id: id });
@@ -124,4 +91,4 @@ userRouter.get("/:id/profile", authenticate, async (req, res) => {
   }
 });
 
-export default userRouter
+export default Router
