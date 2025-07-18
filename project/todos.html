@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <pre>
+        <Strong>App Name: Todo App</Strong>
+Models: 
+User
+email,password(apply bcrypt)
+Todo
+task,status,userId
+
+Routes:
+User Routes
+post /api/users/register
+post /api/users/login
+Todo Routes
+GET /api/todos/:userId
+POST /api/todos/
+PATCH /api/todos/:todoId
+DELETE /api/todos/:todoId
+
+Controller:
+userController
+register,login,
+
+todoController
+addTodo,getTodos,updateTodo,deleteTodo
+    </pre>
+</body>
+</html>

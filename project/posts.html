@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <pre>
+        <strong>App Name: Social App</strong>
+Models: 
+User
+email,password(apply bcrypt)
+Post
+post,userId
+Comment
+comment,postId
+
+Routes:
+User Routes
+post /api/users/register
+post /api/users/login
+Post Routes
+GET /api/posts/:userId
+POST /api/posts/
+DELETE /api/posts/:postId
+Comment Routes:
+GET /api/comments/:postId
+POST /api/comments/
+DELETE /api/comments/:commentId
+
+
+Controllers:
+userController
+register,login,
+
+postController
+addPost,getPosts,deletePost
+
+commentController
+addComment,getComments,deleteComment
+    </pre>
+  </body>
+</html>
